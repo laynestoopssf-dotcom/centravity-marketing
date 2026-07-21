@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, FormEvent } from "react";
+import { createClient } from "@supabase/supabase-js";
 import {
   ArrowRight,
   BarChart3,
@@ -11,6 +12,11 @@ import {
 } from "lucide-react";
 
 const APP_URL = "https://app.centravityhq.com";
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 const NAV_LINKS = [
   { label: "Features", href: "#features" },
@@ -56,21 +62,44 @@ export default function LandingPage() {
   const [name, setName] = useState("");
   const [agencyName, setAgencyName] = useState("");
   const [email, setEmail] = useState("");
-  const [formStatus, setFormStatus] = useState<"idle" | "submitted">("idle");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formStatus, setFormStatus] = useState<"idle" | "success">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleBetaApply = (e: FormEvent) => {
+  const handleLeadSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !agencyName.trim() || !email.trim()) return;
-    setFormStatus("submitted");
+    setErrorMessage("");
+
+    const trimmedEmail = email.trim();
+    if (!trimmedEmail) return;
+
+    if (!betaFull) {
+      if (!name.trim() || !agencyName.trim()) return;
+    }
+
+    setIsSubmitting(true);
+
+    const payload = betaFull
+      ? { email: trimmedEmail, lead_type: "waitlist" as const }
+      : {
+          name: name.trim(),
+          agency_name: agencyName.trim(),
+          email: trimmedEmail,
+          lead_type: "beta" as const,
+        };
+
+    const { error } = await supabase.from("agency_leads").insert(payload);
+
+    setIsSubmitting(false);
+
+    if (error) {
+      setErrorMessage("Something went wrong. Please try again.");
+      return;
+    }
+
+    setFormStatus("success");
     setName("");
     setAgencyName("");
-    setEmail("");
-  };
-
-  const handleWaitlist = (e: FormEvent) => {
-    e.preventDefault();
-    if (!email.trim()) return;
-    setFormStatus("submitted");
     setEmail("");
   };
 
@@ -288,12 +317,12 @@ export default function LandingPage() {
                       Apply for early access and help shape the scoreboard built for insurance agencies.
                     </p>
 
-                    {formStatus === "submitted" ? (
+                    {formStatus === "success" ? (
                       <p className="mt-8 text-sm font-semibold text-teal-400">
-                        Application received. We&apos;ll be in touch soon.
+                        Application received. We&apos;ll be in touch.
                       </p>
                     ) : (
-                      <form onSubmit={handleBetaApply} className="mt-8 space-y-3 text-left">
+                      <form onSubmit={handleLeadSubmit} className="mt-8 space-y-3 text-left">
                         <div>
                           <label htmlFor="beta-name" className="sr-only">
                             Name
@@ -302,10 +331,11 @@ export default function LandingPage() {
                             id="beta-name"
                             type="text"
                             required
+                            disabled={isSubmitting}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             placeholder="Your name"
-                            className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3.5 text-sm font-medium text-white outline-none placeholder:text-slate-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500"
+                            className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3.5 text-sm font-medium text-white outline-none placeholder:text-slate-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500 disabled:opacity-60"
                           />
                         </div>
                         <div>
@@ -316,10 +346,11 @@ export default function LandingPage() {
                             id="beta-agency"
                             type="text"
                             required
+                            disabled={isSubmitting}
                             value={agencyName}
                             onChange={(e) => setAgencyName(e.target.value)}
                             placeholder="Agency name"
-                            className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3.5 text-sm font-medium text-white outline-none placeholder:text-slate-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500"
+                            className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3.5 text-sm font-medium text-white outline-none placeholder:text-slate-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500 disabled:opacity-60"
                           />
                         </div>
                         <div>
@@ -330,18 +361,23 @@ export default function LandingPage() {
                             id="beta-email"
                             type="email"
                             required
+                            disabled={isSubmitting}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="you@agency.com"
-                            className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3.5 text-sm font-medium text-white outline-none placeholder:text-slate-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500"
+                            className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3.5 text-sm font-medium text-white outline-none placeholder:text-slate-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500 disabled:opacity-60"
                           />
                         </div>
                         <button
                           type="submit"
-                          className="w-full rounded-xl bg-purple-600 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-purple-700"
+                          disabled={isSubmitting}
+                          className="w-full rounded-xl bg-purple-600 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-purple-700 disabled:cursor-not-allowed disabled:opacity-70"
                         >
-                          Apply for Beta (Limited Spots)
+                          {isSubmitting ? "Submitting..." : "Apply for Beta (Limited Spots)"}
                         </button>
+                        {errorMessage ? (
+                          <p className="text-center text-sm text-red-400">{errorMessage}</p>
+                        ) : null}
                         <p className="text-center text-xs text-slate-500">
                           Currently accepting 10 founding agencies.
                         </p>
@@ -360,12 +396,12 @@ export default function LandingPage() {
                       Join the waitlist and we&apos;ll notify you as soon as launch spots open.
                     </p>
 
-                    {formStatus === "submitted" ? (
+                    {formStatus === "success" ? (
                       <p className="mt-8 text-sm font-semibold text-teal-400">
-                        You&apos;re on the list. We&apos;ll be in touch soon.
+                        Application received. We&apos;ll be in touch.
                       </p>
                     ) : (
-                      <form onSubmit={handleWaitlist} className="mt-8 flex flex-col gap-3 sm:flex-row">
+                      <form onSubmit={handleLeadSubmit} className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                         <label htmlFor="waitlist-email" className="sr-only">
                           Work email
                         </label>
@@ -373,17 +409,22 @@ export default function LandingPage() {
                           id="waitlist-email"
                           type="email"
                           required
+                          disabled={isSubmitting}
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="you@agency.com"
-                          className="min-w-0 flex-1 rounded-xl border border-slate-700 bg-slate-800 px-4 py-3.5 text-sm font-medium text-white outline-none placeholder:text-slate-500 focus:border-teal-500 focus:ring-2 focus:ring-teal-500"
+                          className="min-w-0 flex-1 rounded-xl border border-slate-700 bg-slate-800 px-4 py-3.5 text-sm font-medium text-white outline-none placeholder:text-slate-500 focus:border-teal-500 focus:ring-2 focus:ring-teal-500 disabled:opacity-60"
                         />
                         <button
                           type="submit"
-                          className="rounded-xl bg-teal-500 px-6 py-3.5 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-teal-400"
+                          disabled={isSubmitting}
+                          className="rounded-xl bg-teal-500 px-6 py-3.5 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-teal-400 disabled:cursor-not-allowed disabled:opacity-70"
                         >
-                          Join Waitlist
+                          {isSubmitting ? "Submitting..." : "Join Waitlist"}
                         </button>
+                        {errorMessage ? (
+                          <p className="w-full text-center text-sm text-red-400">{errorMessage}</p>
+                        ) : null}
                       </form>
                     )}
                   </>
