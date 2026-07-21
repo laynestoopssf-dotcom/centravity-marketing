@@ -13,11 +13,6 @@ import {
 
 const APP_URL = "https://app.centravityhq.com";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
 const NAV_LINKS = [
   { label: "Features", href: "#features" },
   { label: "Scoreboard", href: "#scoreboard" },
@@ -78,6 +73,11 @@ export default function LandingPage() {
     }
 
     setIsSubmitting(true);
+
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL as string,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
+    );
 
     const payload = {
       email: trimmedEmail,
