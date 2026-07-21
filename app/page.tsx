@@ -74,21 +74,249 @@ function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-function ImagePlaceholder({
-  label,
-  className = "",
-  aspect = "aspect-[16/10]",
-}: {
-  label: string;
-  className?: string;
-  aspect?: string;
-}) {
+/** Hero: illustrative Centravity dashboard mockup */
+function DashboardMockupGraphic() {
   return (
     <div
-      className={`flex items-center justify-center rounded-2xl border border-gray-200 bg-gray-100 text-center text-sm font-medium tracking-wide text-gray-400 ${aspect} ${className}`}
+      className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_20px_50px_-12px_rgba(15,23,42,0.12)]"
       aria-hidden
     >
-      [{label}]
+      <div className="flex items-center justify-between border-b border-gray-200 bg-slate-50 px-4 py-3">
+        <div className="flex items-center gap-2">
+          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-purple-600">
+            <BarChart3 size={12} className="text-white" />
+          </span>
+          <span className="text-xs font-bold tracking-wide text-gray-900">Centravity</span>
+        </div>
+        <span className="rounded-md bg-teal-50 px-2 py-0.5 text-[10px] font-bold text-teal-700 ring-1 ring-teal-100">
+          LIVE
+        </span>
+      </div>
+
+      <div className="grid gap-3 p-4 sm:grid-cols-[1fr_1.2fr]">
+        <div className="space-y-3">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Pipeline</p>
+          {[
+            { label: "Quotes", count: 38, width: "w-[85%]", color: "bg-purple-500" },
+            { label: "Apps", count: 22, width: "w-[62%]", color: "bg-blue-500" },
+            { label: "Bound", count: 18, width: "w-[48%]", color: "bg-teal-500" },
+          ].map((stage) => (
+            <div key={stage.label} className="rounded-xl border border-gray-100 bg-slate-50 p-3">
+              <div className="mb-2 flex items-center justify-between">
+                <span className="text-xs font-semibold text-gray-700">{stage.label}</span>
+                <span className="text-xs font-bold tabular-nums text-gray-900">{stage.count}</span>
+              </div>
+              <div className="h-1.5 overflow-hidden rounded-full bg-gray-200">
+                <div className={`h-full rounded-full ${stage.color} ${stage.width}`} />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="space-y-3">
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { label: "Outbound", value: "142" },
+              { label: "Pace", value: "104%" },
+              { label: "Bound", value: "18" },
+            ].map((kpi) => (
+              <div key={kpi.label} className="rounded-xl border border-gray-100 bg-slate-50 px-2.5 py-2.5 text-center">
+                <p className="text-[9px] font-semibold uppercase tracking-wide text-gray-400">{kpi.label}</p>
+                <p className="mt-0.5 text-base font-bold tabular-nums text-gray-900">{kpi.value}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="rounded-xl border border-gray-100 bg-slate-50 p-3">
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400">Leaderboard</p>
+            <div className="space-y-2">
+              {[
+                { name: "Alex M.", pace: "112%", highlight: true },
+                { name: "Jordan K.", pace: "98%", highlight: false },
+                { name: "Sam R.", pace: "91%", highlight: false },
+              ].map((row) => (
+                <div
+                  key={row.name}
+                  className={`flex items-center justify-between rounded-lg px-2.5 py-2 ${
+                    row.highlight ? "bg-purple-50 ring-1 ring-purple-100" : "bg-white"
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`flex h-6 w-6 items-center justify-center rounded-full text-[9px] font-bold ${
+                        row.highlight ? "bg-purple-600 text-white" : "bg-gray-200 text-gray-600"
+                      }`}
+                    >
+                      {row.name.charAt(0)}
+                    </span>
+                    <span className="text-xs font-semibold text-gray-800">{row.name}</span>
+                  </div>
+                  <span
+                    className={`text-xs font-bold tabular-nums ${
+                      row.highlight ? "text-purple-600" : "text-gray-500"
+                    }`}
+                  >
+                    {row.pace}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Coaching: abstract mentorship / collaboration graphic */
+function CoachingConceptGraphic({ wide = false }: { wide?: boolean }) {
+  return (
+    <div
+      className={`relative overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br from-slate-50 via-white to-purple-50 ${
+        wide ? "aspect-[21/9] min-h-[280px] md:min-h-[340px]" : "aspect-[4/3]"
+      }`}
+      aria-hidden
+    >
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(147,51,234,0.08),transparent_45%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_70%,rgba(20,184,166,0.08),transparent_40%)]" />
+
+      <svg viewBox="0 0 480 360" className="absolute inset-0 h-full w-full" fill="none">
+        {/* Growth arrows */}
+        <path d="M60 280 L140 200 L200 230 L280 140" stroke="#a855f7" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
+        <path d="M260 155 L280 140 L295 160" stroke="#a855f7" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
+        <path d="M320 260 L380 180 L420 200" stroke="#14b8a6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.45" />
+        <path d="M365 190 L380 180 L390 195" stroke="#14b8a6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.45" />
+
+        {/* Connection arcs */}
+        <path d="M160 160 Q240 100 320 160" stroke="#c4b5fd" strokeWidth="2" strokeDasharray="6 6" opacity="0.7" />
+
+        {/* People nodes */}
+        <circle cx="160" cy="170" r="28" fill="#f5f3ff" stroke="#a855f7" strokeWidth="2" />
+        <circle cx="160" cy="162" r="9" fill="#a855f7" />
+        <path d="M142 190 Q160 178 178 190" stroke="#a855f7" strokeWidth="3" strokeLinecap="round" fill="none" />
+
+        <circle cx="320" cy="170" r="28" fill="#f0fdfa" stroke="#14b8a6" strokeWidth="2" />
+        <circle cx="320" cy="162" r="9" fill="#14b8a6" />
+        <path d="M302 190 Q320 178 338 190" stroke="#14b8a6" strokeWidth="3" strokeLinecap="round" fill="none" />
+
+        <circle cx="240" cy="240" r="24" fill="#eff6ff" stroke="#3b82f6" strokeWidth="2" />
+        <circle cx="240" cy="233" r="8" fill="#3b82f6" />
+        <path d="M224 258 Q240 248 256 258" stroke="#3b82f6" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+
+        {/* Handshake symbol between mentors */}
+        <rect x="214" y="148" width="52" height="22" rx="11" fill="#fff" stroke="#e5e7eb" strokeWidth="1.5" />
+        <path d="M224 159 H256" stroke="#7c3aed" strokeWidth="3" strokeLinecap="round" />
+        <path d="M230 154 L236 160 L230 164" stroke="#14b8a6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M250 154 L244 160 L250 164" stroke="#14b8a6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+
+      <div className="absolute bottom-4 left-4 right-4 flex flex-wrap gap-2">
+        {["Mentorship", "Collaboration", "Growth"].map((tag) => (
+          <span
+            key={tag}
+            className="rounded-full border border-gray-200 bg-white/90 px-3 py-1 text-[11px] font-semibold text-gray-600 shadow-sm"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Founder: Bearded Agent silhouette concept */
+function FounderConceptGraphic() {
+  return (
+    <div
+      className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-b from-slate-50 to-gray-100"
+      aria-hidden
+    >
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_30%,rgba(147,51,234,0.1),transparent_55%)]" />
+
+      <svg viewBox="0 0 320 400" className="absolute inset-0 h-full w-full" fill="none">
+        {/* Soft backdrop circle */}
+        <circle cx="160" cy="175" r="110" fill="#f8fafc" stroke="#e5e7eb" strokeWidth="1" />
+
+        {/* Shoulders / blazer */}
+        <path
+          d="M70 360 Q90 250 160 245 Q230 250 250 360 Z"
+          fill="#1e293b"
+        />
+        <path
+          d="M118 270 Q160 290 202 270 L210 360 L110 360 Z"
+          fill="#334155"
+        />
+        {/* Collar / tie accent */}
+        <path d="M145 255 L160 290 L175 255" fill="#7c3aed" />
+
+        {/* Neck */}
+        <rect x="145" y="195" width="30" height="55" rx="10" fill="#cbd5e1" />
+
+        {/* Head */}
+        <ellipse cx="160" cy="155" rx="48" ry="55" fill="#cbd5e1" />
+
+        {/* Hair */}
+        <path
+          d="M112 145 Q112 95 160 88 Q208 95 208 145 Q200 110 160 108 Q120 110 112 145 Z"
+          fill="#334155"
+        />
+
+        {/* Beard (The Bearded Agent) */}
+        <path
+          d="M120 170 Q125 220 160 235 Q195 220 200 170 Q190 195 160 200 Q130 195 120 170 Z"
+          fill="#475569"
+        />
+        <path
+          d="M128 168 Q135 198 160 205 Q185 198 192 168"
+          stroke="#64748b"
+          strokeWidth="2"
+          fill="none"
+          opacity="0.5"
+        />
+
+        {/* Mustache */}
+        <path
+          d="M138 175 Q160 185 182 175"
+          stroke="#475569"
+          strokeWidth="6"
+          strokeLinecap="round"
+          fill="none"
+        />
+      </svg>
+
+      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-white via-white/90 to-transparent px-5 pb-5 pt-16 text-center">
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-purple-600">The Bearded Agent</p>
+        <p className="mt-1 text-sm font-semibold text-gray-900">Built in the agency trenches</p>
+      </div>
+    </div>
+  );
+}
+
+/** Compact engine architecture concept */
+function EngineConceptGraphic() {
+  return (
+    <div className="flex aspect-[4/3] flex-col justify-center gap-3 rounded-2xl border border-gray-200 bg-white p-5" aria-hidden>
+      <div className="rounded-xl border border-purple-100 bg-purple-50 px-4 py-3 text-center">
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-purple-600">Activity Capture</p>
+        <p className="mt-1 text-sm font-bold text-gray-900">Calls · Quotes · Apps · Binds</p>
+      </div>
+      <div className="flex justify-center">
+        <div className="h-6 w-px bg-gradient-to-b from-purple-300 to-teal-300" />
+      </div>
+      <div className="rounded-xl border border-teal-100 bg-teal-50 px-4 py-3 text-center">
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-teal-700">Centravity Engine</p>
+        <p className="mt-1 text-sm font-bold text-gray-900">Real-time multi-line math</p>
+      </div>
+      <div className="flex justify-center">
+        <div className="h-6 w-px bg-gradient-to-b from-teal-300 to-blue-300" />
+      </div>
+      <div className="grid grid-cols-3 gap-2">
+        {["Producers", "Ops", "Owners"].map((role) => (
+          <div key={role} className="rounded-lg border border-gray-200 bg-slate-50 px-2 py-2.5 text-center">
+            <p className="text-[10px] font-semibold text-gray-700">{role}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -232,7 +460,7 @@ export default function LandingPage() {
               </div>
 
               <div id="scoreboard">
-                <ImagePlaceholder label="Dashboard Mockup Screen" aspect="aspect-[4/3]" />
+                <DashboardMockupGraphic />
               </div>
             </div>
           </div>
@@ -252,7 +480,9 @@ export default function LandingPage() {
                   who refuse to run their agency on yesterday&apos;s tools.
                 </p>
               </div>
-              <ImagePlaceholder label="Dashboard Preview" className="hidden lg:block" aspect="aspect-[5/3]" />
+              <div className="hidden lg:block">
+                <DashboardMockupGraphic />
+              </div>
             </div>
 
             <div className="mt-12 grid gap-4 sm:grid-cols-2">
@@ -302,7 +532,7 @@ export default function LandingPage() {
                   ))}
                 </ul>
               </div>
-              <ImagePlaceholder label="Coaching Moment" aspect="aspect-[4/3]" />
+              <CoachingConceptGraphic />
             </div>
           </div>
         </section>
@@ -320,11 +550,9 @@ export default function LandingPage() {
                 performance conversations that grow people instead of policing them.
               </p>
             </div>
-            <ImagePlaceholder
-              label="Candid Coaching / Mentorship Shot"
-              className="mt-12"
-              aspect="aspect-[21/9] min-h-[280px] md:min-h-[360px]"
-            />
+            <div className="mt-12">
+              <CoachingConceptGraphic wide />
+            </div>
           </div>
         </section>
 
@@ -357,11 +585,6 @@ export default function LandingPage() {
                 </article>
               ))}
             </div>
-
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              <ImagePlaceholder label="Producer View" aspect="aspect-[16/9]" />
-              <ImagePlaceholder label="Owner Insights" aspect="aspect-[16/9]" />
-            </div>
           </div>
         </section>
 
@@ -370,7 +593,7 @@ export default function LandingPage() {
           <div className="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-24">
             <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
               <div className="mx-auto w-full max-w-sm lg:mx-0">
-                <ImagePlaceholder label="Founder Shot" aspect="aspect-[4/5]" />
+                <FounderConceptGraphic />
               </div>
               <div>
                 <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-600">
@@ -402,7 +625,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Tallybound Engine */}
+        {/* Centravity Engine */}
         <section id="engine" className="border-t border-gray-200 bg-white">
           <div className="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-24">
             <div className="rounded-2xl border border-gray-200 bg-slate-50 px-6 py-10 md:px-12 md:py-14">
@@ -410,15 +633,15 @@ export default function LandingPage() {
                 <div>
                   <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-teal-600">
                     <Cpu size={14} aria-hidden />
-                    The Tallybound Engine
+                    The Centravity Engine
                   </p>
                   <h2 className="mt-3 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                     Proprietary data-tracking architecture. Real-time accuracy. Zero spreadsheet chaos.
                   </h2>
                   <p className="mt-4 text-base leading-relaxed text-gray-600">
-                    Under the scoreboard sits Tallybound—our proprietary engine that captures production activity as
-                    it happens, calculates multi-line math cleanly, and keeps every role synced to the same source of
-                    truth. No export gymnastics. No &ldquo;whose sheet is right?&rdquo; debates.
+                    Under the scoreboard sits the Centravity Engine—our proprietary system that captures production
+                    activity as it happens, calculates multi-line math cleanly, and keeps every role synced to the
+                    same source of truth. No export gymnastics. No &ldquo;whose sheet is right?&rdquo; debates.
                   </p>
                   <div className="mt-8 grid gap-3 sm:grid-cols-2">
                     {[
@@ -436,7 +659,7 @@ export default function LandingPage() {
                     ))}
                   </div>
                 </div>
-                <ImagePlaceholder label="Tallybound Architecture" aspect="aspect-[4/3]" />
+                <EngineConceptGraphic />
               </div>
             </div>
           </div>
