@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, FormEvent } from "react";
+import React, { useEffect, useState, FormEvent } from "react";
 import { createClient } from "@supabase/supabase-js";
 import {
   ArrowRight,
@@ -60,6 +60,23 @@ export default function LandingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formStatus, setFormStatus] = useState<"idle" | "success">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    const checkBetaCapacity = async () => {
+      const supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL as string,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
+      );
+
+      const { data: count, error } = await supabase.rpc("get_beta_count");
+
+      if (!error && count !== null && count >= 10) {
+        setBetaFull(true);
+      }
+    };
+
+    checkBetaCapacity();
+  }, []);
 
   const handleLeadSubmit = async (e: FormEvent) => {
     e.preventDefault();
