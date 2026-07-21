@@ -79,14 +79,12 @@ export default function LandingPage() {
 
     setIsSubmitting(true);
 
-    const payload = betaFull
-      ? { email: trimmedEmail, lead_type: "waitlist" as const }
-      : {
-          name: name.trim(),
-          agency_name: agencyName.trim(),
-          email: trimmedEmail,
-          lead_type: "beta" as const,
-        };
+    const payload = {
+      email: trimmedEmail,
+      name: betaFull ? null : name.trim(),
+      agency_name: betaFull ? null : agencyName.trim(),
+      lead_type: betaFull ? "waitlist" : "beta",
+    };
 
     const { error } = await supabase.from("agency_leads").insert(payload);
 
