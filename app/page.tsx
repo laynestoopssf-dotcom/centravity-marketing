@@ -14,7 +14,6 @@ import {
   Target,
   Trophy,
   Users,
-  Zap,
 } from "lucide-react";
 
 const APP_URL = "https://app.centravityhq.com";
@@ -28,24 +27,19 @@ const NAV_LINKS = [
 
 const FEATURES = [
   {
-    icon: Zap,
-    title: "Real-Time Production Pacing",
-    body: "Instant insight into daily outbound calls, quotes, bound policies, and multi-line placement ratios—so your team always knows if they're ahead or behind.",
+    icon: Trophy,
+    title: "Data-Driven Motivation",
+    body: "While the dashboard gives you the 10,000-foot view, the gamified leaderboards translate those big revenue goals into clear, bite-sized daily targets for your producers.",
   },
   {
     icon: Calculator,
-    title: "Automated Multi-Line Math",
-    body: "Eradicate spreadsheets. Seamless calculation support for Auto, Fire, Commercial, Life, and Health—commission-ready without the manual grind.",
-  },
-  {
-    icon: Trophy,
-    title: "Gamified Team Leaderboards",
-    body: "Role-gated visibility that fuels healthy competition and accountability without micromanagement. Everyone sees what they need—nothing more.",
+    title: "Built from the Desk, Not Silicon Valley",
+    body: "Engineered specifically to handle the unique math of an independent insurance agency. We decouple Life and Health from P&C Variable Comp, completely eliminating the need for messy side-spreadsheets.",
   },
   {
     icon: LineChart,
-    title: "Executive Insights",
-    body: "One-click cash flow, commission forecasting, and team performance breakdowns built for agency owners who need clarity, not clutter.",
+    title: "Active Course-Correction",
+    body: "Stop waiting for month-end reports to realize you missed a tier. Centravity constantly recalculates your trajectory based on today's bound policies.",
   },
 ] as const;
 
@@ -431,12 +425,12 @@ export default function LandingPage() {
                   Coaching-first agency scoreboard
                 </p>
                 <h1 className="text-4xl font-bold leading-[1.12] tracking-tight text-gray-900 sm:text-5xl lg:text-[3.15rem]">
-                  Stop Micromanaging. Start Mentoring. The Scoreboard Built for Modern Agencies.
+                  Stop Guessing Where Your Agency Will Finish the Year.
                 </h1>
                 <p className="mt-5 max-w-xl text-base leading-relaxed text-gray-600 sm:text-lg">
-                  Legacy tools treat your team like script-readers. Centravity turns production data into
-                  real-time, role-gated leaderboards that fuel coaching—not control—across Auto, Fire,
-                  Commercial, Life, and Health.
+                  The first predictive growth engine built exclusively for insurance agents. Plug in your revenue
+                  targets, and Centravity&apos;s What-If engine maps the exact daily production your team needs to
+                  get there.
                 </p>
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
                   <button
@@ -444,7 +438,7 @@ export default function LandingPage() {
                     onClick={() => scrollToId("beta")}
                     className="inline-flex items-center justify-center gap-2 rounded-xl bg-purple-600 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-purple-700"
                   >
-                    Apply for Private Beta
+                    Secure Your Beta Access
                     <ArrowRight size={16} aria-hidden />
                   </button>
                   <a
@@ -485,7 +479,7 @@ export default function LandingPage() {
               </div>
             </div>
 
-            <div className="mt-12 grid gap-4 sm:grid-cols-2">
+            <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {FEATURES.map(({ icon: Icon, title, body }) => (
                 <article
                   key={title}
