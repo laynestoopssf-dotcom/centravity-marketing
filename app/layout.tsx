@@ -12,9 +12,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Centravity — The Ultimate Scoreboard for Insurance Agencies",
-  description:
-    "Centravity automates multi-line commission math and turns agency data into real-time, role-gated leaderboards that drive revenue.",
+  title: "Centravity",
+  description: "Centravity — Private Beta Access.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
