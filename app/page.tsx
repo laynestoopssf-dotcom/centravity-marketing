@@ -1,6 +1,6 @@
 import { BarChart3 } from "lucide-react";
 
-const LOGIN_URL = "https://app.centravityhq.com/login";
+const LOGIN_URL = "https://app.centravityhq.com/";
 
 export default function StealthLandingPage() {
   return (
