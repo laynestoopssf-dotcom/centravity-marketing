@@ -544,7 +544,7 @@ export default function LandingPage() {
 
           <a
             href={APP_URL}
-            className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
+            className="rounded-xl bg-purple-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-purple-700"
           >
             Sign In
           </a>
@@ -573,7 +573,7 @@ export default function LandingPage() {
                   <button
                     type="button"
                     onClick={() => scrollToId("beta")}
-                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-purple-600 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-purple-700"
                   >
                     Secure Your Beta Access
                     <ArrowRight size={16} aria-hidden />
@@ -870,7 +870,7 @@ export default function LandingPage() {
                         <button
                           type="submit"
                           disabled={isSubmitting}
-                          className="w-full rounded-xl bg-blue-600 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
+                          className="w-full rounded-xl bg-purple-600 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-purple-700 disabled:cursor-not-allowed disabled:opacity-70"
                         >
                           {isSubmitting ? "Submitting..." : "Apply for Beta (Limited Spots)"}
                         </button>
@@ -917,7 +917,7 @@ export default function LandingPage() {
                         <button
                           type="submit"
                           disabled={isSubmitting}
-                          className="rounded-xl bg-emerald-600 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-70"
+                          className="rounded-xl bg-purple-600 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-purple-700 disabled:cursor-not-allowed disabled:opacity-70"
                         >
                           {isSubmitting ? "Submitting..." : "Join Waitlist"}
                         </button>
