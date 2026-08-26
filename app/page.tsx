@@ -49,18 +49,21 @@ const ROLE_TILES = [
     role: "Sales Producers",
     title: "Know exactly where you stand—today.",
     body: "Real-time tracking for outbound calls, quoting KPIs, and pace to goal. No end-of-week surprises. No guessing if you're winning the day.",
+    Visual: LivePacingVisual,
   },
   {
     icon: Briefcase,
     role: "Office Managers & Operations",
     title: "Pipeline clarity without the chase.",
     body: "Clear workflow visibility across quotes, apps, and binds. Spot bottlenecks early and keep the floor moving—without hovering over every desk.",
+    Visual: RollingMetricsVisual,
   },
   {
     icon: Users,
     role: "Agency Owners",
     title: "Move from boss to mentor.",
     body: "Intuitive performance insights that power coaching conversations—not interrogation. Lead with data, develop people, grow production.",
+    Visual: TeamVisibilityVisual,
   },
 ] as const;
 
@@ -68,96 +71,145 @@ function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-/** Hero: illustrative Centravity dashboard mockup */
+/** Hero: abstract Tailwind "window" UI composition (Vercel/Linear-style skeleton) */
 function DashboardMockupGraphic() {
+  const rings = [
+    { pct: 82, label: "Quotes" },
+    { pct: 64, label: "Apps" },
+    { pct: 47, label: "Bound" },
+  ];
+  const circumference = 2 * Math.PI * 15;
+
   return (
-    <div
-      className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_20px_50px_-12px_rgba(15,23,42,0.12)]"
-      aria-hidden
-    >
-      <div className="flex items-center justify-between border-b border-gray-200 bg-slate-50 px-4 py-3">
-        <div className="flex items-center gap-2">
-          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-purple-600">
-            <BarChart3 size={12} className="text-white" />
+    <div className="relative">
+      <div className="absolute -inset-6 rounded-[2rem] bg-amber-500/10 blur-3xl" aria-hidden />
+      <div
+        className="relative overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950 shadow-[0_30px_60px_-20px_rgba(0,0,0,0.55)]"
+        aria-hidden
+      >
+        {/* Window chrome */}
+        <div className="flex items-center justify-between border-b border-zinc-800 bg-zinc-900 px-4 py-3">
+          <div className="flex items-center gap-2">
+            <span className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
+            <span className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
+            <span className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
+          </div>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-400 ring-1 ring-amber-500/30">
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_rgba(245,158,11,0.9)]" />
+            Live
           </span>
-          <span className="text-xs font-bold tracking-wide text-gray-900">Centravity</span>
-        </div>
-        <span className="rounded-md bg-teal-50 px-2 py-0.5 text-[10px] font-bold text-teal-700 ring-1 ring-teal-100">
-          LIVE
-        </span>
-      </div>
-
-      <div className="grid gap-3 p-4 sm:grid-cols-[1fr_1.2fr]">
-        <div className="space-y-3">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Pipeline</p>
-          {[
-            { label: "Quotes", count: 38, width: "w-[85%]", color: "bg-purple-500" },
-            { label: "Apps", count: 22, width: "w-[62%]", color: "bg-blue-500" },
-            { label: "Bound", count: 18, width: "w-[48%]", color: "bg-teal-500" },
-          ].map((stage) => (
-            <div key={stage.label} className="rounded-xl border border-gray-100 bg-slate-50 p-3">
-              <div className="mb-2 flex items-center justify-between">
-                <span className="text-xs font-semibold text-gray-700">{stage.label}</span>
-                <span className="text-xs font-bold tabular-nums text-gray-900">{stage.count}</span>
-              </div>
-              <div className="h-1.5 overflow-hidden rounded-full bg-gray-200">
-                <div className={`h-full rounded-full ${stage.color} ${stage.width}`} />
-              </div>
-            </div>
-          ))}
         </div>
 
-        <div className="space-y-3">
-          <div className="grid grid-cols-3 gap-2">
-            {[
-              { label: "Outbound", value: "142" },
-              { label: "Pace", value: "104%" },
-              { label: "Bound", value: "18" },
-            ].map((kpi) => (
-              <div key={kpi.label} className="rounded-xl border border-gray-100 bg-slate-50 px-2.5 py-2.5 text-center">
-                <p className="text-[9px] font-semibold uppercase tracking-wide text-gray-400">{kpi.label}</p>
-                <p className="mt-0.5 text-base font-bold tabular-nums text-gray-900">{kpi.value}</p>
-              </div>
+        <div className="grid grid-cols-[64px_1fr] sm:grid-cols-[80px_1fr]">
+          {/* Mock sidebar */}
+          <div className="space-y-2.5 border-r border-zinc-800 bg-zinc-900/50 p-3">
+            <div className="h-2 w-8 rounded-full bg-amber-500/80 shadow-[0_0_8px_rgba(245,158,11,0.6)]" />
+            {[40, 28, 36, 24, 32].map((w, i) => (
+              <div key={i} className="h-2 rounded-full bg-zinc-800" style={{ width: `${w}px` }} />
             ))}
           </div>
 
-          <div className="rounded-xl border border-gray-100 bg-slate-50 p-3">
-            <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400">Leaderboard</p>
+          {/* Main content */}
+          <div className="space-y-4 p-4 sm:p-5">
+            {/* Glowing progress rings */}
+            <div className="grid grid-cols-3 gap-2 sm:gap-3">
+              {rings.map((ring) => (
+                <div
+                  key={ring.label}
+                  className="flex flex-col items-center gap-2 rounded-xl border border-zinc-800 bg-zinc-900 py-3"
+                >
+                  <svg viewBox="0 0 36 36" className="h-9 w-9 -rotate-90 sm:h-10 sm:w-10">
+                    <circle cx="18" cy="18" r="15" fill="none" stroke="#27272a" strokeWidth="4" />
+                    <circle
+                      cx="18"
+                      cy="18"
+                      r="15"
+                      fill="none"
+                      stroke="#f59e0b"
+                      strokeWidth="4"
+                      strokeLinecap="round"
+                      strokeDasharray={`${(ring.pct / 100) * circumference} 999`}
+                      style={{ filter: "drop-shadow(0 0 4px rgba(245,158,11,0.8))" }}
+                    />
+                  </svg>
+                  <span className="text-[9px] font-semibold uppercase tracking-wide text-zinc-500">{ring.label}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Blurred skeleton text bars */}
             <div className="space-y-2">
               {[
-                { name: "Alex M.", pace: "112%", highlight: true },
-                { name: "Jordan K.", pace: "98%", highlight: false },
-                { name: "Sam R.", pace: "91%", highlight: false },
-              ].map((row) => (
-                <div
-                  key={row.name}
-                  className={`flex items-center justify-between rounded-lg px-2.5 py-2 ${
-                    row.highlight ? "bg-purple-50 ring-1 ring-purple-100" : "bg-white"
-                  }`}
-                >
-                  <div className="flex items-center gap-2">
-                    <span
-                      className={`flex h-6 w-6 items-center justify-center rounded-full text-[9px] font-bold ${
-                        row.highlight ? "bg-purple-600 text-white" : "bg-gray-200 text-gray-600"
-                      }`}
-                    >
-                      {row.name.charAt(0)}
-                    </span>
-                    <span className="text-xs font-semibold text-gray-800">{row.name}</span>
-                  </div>
-                  <span
-                    className={`text-xs font-bold tabular-nums ${
-                      row.highlight ? "text-purple-600" : "text-gray-500"
-                    }`}
-                  >
-                    {row.pace}
-                  </span>
-                </div>
+                { w: "w-full", o: "opacity-90" },
+                { w: "w-5/6", o: "opacity-70" },
+                { w: "w-3/4", o: "opacity-50" },
+              ].map((bar, i) => (
+                <div key={i} className={`h-2.5 rounded-full bg-zinc-800 ${bar.w} ${bar.o}`} />
               ))}
             </div>
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+/** Micro-visual: abstract live pacing bar with amber glow */
+function LivePacingVisual() {
+  return (
+    <div className="mt-5 rounded-xl border border-zinc-800 bg-zinc-950 p-4">
+      <div className="mb-2 flex items-center justify-between text-[10px] font-semibold uppercase tracking-wide text-zinc-500">
+        <span>Today&apos;s Pace</span>
+        <span className="text-amber-400">92%</span>
+      </div>
+      <div className="h-2.5 overflow-hidden rounded-full bg-zinc-800">
+        <div className="h-full w-[92%] rounded-full bg-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.7)]" />
+      </div>
+    </div>
+  );
+}
+
+/** Micro-visual: stylized rolling trend line */
+function RollingMetricsVisual() {
+  return (
+    <div className="mt-5 rounded-xl border border-zinc-800 bg-zinc-950 p-4">
+      <div className="mb-2 flex items-center justify-between text-[10px] font-semibold uppercase tracking-wide text-zinc-500">
+        <span>30-Day Trend</span>
+        <span className="text-amber-400">+18%</span>
+      </div>
+      <svg viewBox="0 0 96 32" className="h-8 w-full" preserveAspectRatio="none" aria-hidden>
+        <polyline
+          points="0,28 12,24 24,26 36,18 48,20 60,12 72,14 84,6 96,8"
+          fill="none"
+          stroke="#f59e0b"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          style={{ filter: "drop-shadow(0 0 4px rgba(245,158,11,0.7))" }}
+        />
+        <circle cx="96" cy="8" r="2.5" fill="#f59e0b" style={{ filter: "drop-shadow(0 0 4px rgba(245,158,11,0.9))" }} />
+      </svg>
+    </div>
+  );
+}
+
+/** Micro-visual: overlapping team avatars with a glowing active state */
+function TeamVisibilityVisual() {
+  return (
+    <div className="mt-5 flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-950 p-4">
+      <div className="flex -space-x-3">
+        {[0, 1, 2, 3].map((i) => (
+          <span
+            key={i}
+            className={`h-8 w-8 rounded-full border-2 border-zinc-950 ${
+              i === 1
+                ? "bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.7)] ring-2 ring-amber-400/50"
+                : "bg-zinc-700"
+            }`}
+          />
+        ))}
+      </div>
+      <span className="text-[11px] font-semibold text-zinc-500">4 producers online</span>
     </div>
   );
 }
@@ -565,7 +617,7 @@ export default function LandingPage() {
             </div>
 
             <div className="mt-12 grid gap-4 lg:grid-cols-3">
-              {ROLE_TILES.map(({ icon: Icon, role, title, body }) => (
+              {ROLE_TILES.map(({ icon: Icon, role, title, body, Visual }) => (
                 <article
                   key={role}
                   className="rounded-2xl border border-gray-200 bg-slate-50 p-6 transition hover:border-purple-200 hover:bg-white hover:shadow-sm"
@@ -576,6 +628,7 @@ export default function LandingPage() {
                   <p className="mt-5 text-xs font-bold uppercase tracking-[0.16em] text-purple-600">{role}</p>
                   <h3 className="mt-2 text-lg font-bold text-gray-900">{title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-gray-600">{body}</p>
+                  <Visual />
                 </article>
               ))}
             </div>
