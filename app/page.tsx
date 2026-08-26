@@ -218,7 +218,7 @@ function CoachingConceptGraphic({ wide = false }: { wide?: boolean }) {
   );
 }
 
-/** Founder: Bearded Agent silhouette concept */
+/** Origin section: agency principal silhouette concept */
 function FounderConceptGraphic() {
   return (
     <div
@@ -255,7 +255,7 @@ function FounderConceptGraphic() {
           fill="#334155"
         />
 
-        {/* Beard (The Bearded Agent) */}
+        {/* Beard detail */}
         <path
           d="M120 170 Q125 220 160 235 Q195 220 200 170 Q190 195 160 200 Q130 195 120 170 Z"
           fill="#475569"
@@ -279,8 +279,8 @@ function FounderConceptGraphic() {
       </svg>
 
       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-white via-white/90 to-transparent px-5 pb-5 pt-16 text-center">
-        <p className="text-xs font-bold uppercase tracking-[0.16em] text-purple-600">The Bearded Agent</p>
-        <p className="mt-1 text-sm font-semibold text-gray-900">Built in the agency trenches</p>
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-purple-600">Agency Principal</p>
+        <p className="mt-1 text-sm font-semibold text-gray-900">Founded on the agency floor</p>
       </div>
     </div>
   );
@@ -582,7 +582,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Built by an Agent */}
+        {/* Origin / About */}
         <section id="founder" className="border-t border-gray-200 bg-slate-50">
           <div className="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-24">
             <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
@@ -592,19 +592,21 @@ export default function LandingPage() {
               <div>
                 <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-600">
                   <Shield size={14} aria-hidden />
-                  Built by an Agent, for Agents
+                  Founded on the Agency Floor
                 </p>
                 <h2 className="mt-3 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                   Not another SaaS tool from people who&apos;ve never sat a desk.
                 </h2>
                 <p className="mt-4 text-base leading-relaxed text-gray-600">
-                  Centravity was forged in the trenches of a real, active insurance agency—where missed binds, messy
-                  multi-line math, and end-of-day scoreboard scramble are daily reality. We built what we needed when
-                  legacy platforms fell short.
+                  Centravity was founded by agency principal Jenae, who ran a high-performing, multi-line agency and
+                  kept hitting the same wall: missed binds, messy multi-line math, and an end-of-day scoreboard
+                  scramble that no legacy platform actually solved. She knew exactly where the blind spots were
+                  because she was living them every day.
                 </p>
                 <p className="mt-4 text-base leading-relaxed text-gray-600">
-                  Every feature maps to friction you already feel: pacing producers without hovering, seeing true
-                  pipeline health, and coaching with confidence instead of gut feel.
+                  Rather than duct-tape another spreadsheet together, she brought in a team of enterprise software
+                  consultants to build it right—engineered specifically to bridge the gap between what producers do
+                  at their desks every day and the revenue goals ownership is actually chasing.
                 </p>
                 <button
                   type="button"
