@@ -218,7 +218,7 @@ function CoachingConceptGraphic({ wide = false }: { wide?: boolean }) {
   );
 }
 
-/** Origin section: agency principal silhouette concept */
+/** Origin section: agency floor silhouette concept */
 function FounderConceptGraphic() {
   return (
     <div
@@ -279,8 +279,8 @@ function FounderConceptGraphic() {
       </svg>
 
       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-white via-white/90 to-transparent px-5 pb-5 pt-16 text-center">
-        <p className="text-xs font-bold uppercase tracking-[0.16em] text-purple-600">Agency Principal</p>
-        <p className="mt-1 text-sm font-semibold text-gray-900">Founded on the agency floor</p>
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-purple-600">Real Agency Floor</p>
+        <p className="mt-1 text-sm font-semibold text-gray-900">Where Centravity began</p>
       </div>
     </div>
   );
@@ -592,21 +592,21 @@ export default function LandingPage() {
               <div>
                 <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-600">
                   <Shield size={14} aria-hidden />
-                  Founded on the Agency Floor
+                  Born on the Sales Floor
                 </p>
                 <h2 className="mt-3 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                   Not another SaaS tool from people who&apos;ve never sat a desk.
                 </h2>
                 <p className="mt-4 text-base leading-relaxed text-gray-600">
-                  Centravity was founded by agency principal Jenae, who ran a high-performing, multi-line agency and
-                  kept hitting the same wall: missed binds, messy multi-line math, and an end-of-day scoreboard
-                  scramble that no legacy platform actually solved. She knew exactly where the blind spots were
-                  because she was living them every day.
+                  Centravity was born on the sales floor of a high-performing, multi-line agency—not in a boardroom.
+                  It exists because legacy CRMs and generic SaaS dashboards flat-out ignore the blind spots that eat
+                  into production every day: missed binds, messy multi-line math, and an end-of-day scoreboard
+                  scramble nobody has time for.
                 </p>
                 <p className="mt-4 text-base leading-relaxed text-gray-600">
-                  Rather than duct-tape another spreadsheet together, she brought in a team of enterprise software
-                  consultants to build it right—engineered specifically to bridge the gap between what producers do
-                  at their desks every day and the revenue goals ownership is actually chasing.
+                  To fix it right, the agency partnered with a team of specialized enterprise software consultants
+                  to engineer the platform from the ground up—built specifically to bridge the gap between what
+                  producers actually do at their desks and the revenue pacing ownership needs to see.
                 </p>
                 <button
                   type="button"
