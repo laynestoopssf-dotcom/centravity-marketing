@@ -3,12 +3,14 @@
 import React, { useEffect, useState, FormEvent } from "react";
 import { createClient } from "@supabase/supabase-js";
 import {
+  Activity,
   ArrowRight,
   BarChart3,
   Briefcase,
   Calculator,
   Cpu,
   HeartHandshake,
+  LayoutDashboard,
   LineChart,
   Shield,
   Target,
@@ -71,13 +73,20 @@ function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-/** Hero: abstract Tailwind "window" UI composition (Vercel/Linear-style skeleton) */
+/** Hero: high-fidelity, desensitized "Centravity View" of the Agent Dashboard */
 function DashboardMockupGraphic() {
-  const rings = [
-    { pct: 82, label: "Quotes" },
-    { pct: 64, label: "Apps" },
-    { pct: 47, label: "Bound" },
+  const kpis = [
+    { label: "MTD Pacing", value: "104%" },
+    { label: "Quotes MTD", value: "212" },
+    { label: "Bound YTD", value: "1,340" },
   ];
+  const producers = [
+    { name: "Producer A", pace: 118 },
+    { name: "Agent B", pace: 97 },
+    { name: "Producer C", pace: 84 },
+  ];
+  const navIcons = [LayoutDashboard, Activity, Users, Target];
+  const pacingPct = 104;
   const circumference = 2 * Math.PI * 15;
 
   return (
@@ -90,62 +99,106 @@ function DashboardMockupGraphic() {
         {/* Window chrome */}
         <div className="flex items-center justify-between border-b border-zinc-800 bg-zinc-900 px-4 py-3">
           <div className="flex items-center gap-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
-            <span className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
-            <span className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
+            <span className="flex h-5 w-5 items-center justify-center rounded-md bg-amber-500/15 ring-1 ring-amber-500/30">
+              <BarChart3 size={11} className="text-amber-400" />
+            </span>
+            <span className="text-[11px] font-bold tracking-wide text-zinc-300">Agent Dashboard</span>
           </div>
           <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-400 ring-1 ring-amber-500/30">
             <span className="h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_rgba(245,158,11,0.9)]" />
-            Live
+            Demo Data
           </span>
         </div>
 
-        <div className="grid grid-cols-[64px_1fr] sm:grid-cols-[80px_1fr]">
-          {/* Mock sidebar */}
-          <div className="space-y-2.5 border-r border-zinc-800 bg-zinc-900/50 p-3">
-            <div className="h-2 w-8 rounded-full bg-amber-500/80 shadow-[0_0_8px_rgba(245,158,11,0.6)]" />
-            {[40, 28, 36, 24, 32].map((w, i) => (
-              <div key={i} className="h-2 rounded-full bg-zinc-800" style={{ width: `${w}px` }} />
+        <div className="grid grid-cols-[52px_1fr] sm:grid-cols-[64px_1fr]">
+          {/* Mock sidebar with generic nav icons */}
+          <div className="flex flex-col items-center gap-4 border-r border-zinc-800 bg-zinc-900/50 py-4">
+            {navIcons.map((Icon, i) => (
+              <span
+                key={i}
+                className={`flex h-8 w-8 items-center justify-center rounded-lg ${
+                  i === 0
+                    ? "bg-amber-500/15 text-amber-400 ring-1 ring-amber-500/30 shadow-[0_0_10px_rgba(245,158,11,0.35)]"
+                    : "text-zinc-600"
+                }`}
+              >
+                <Icon size={14} aria-hidden />
+              </span>
             ))}
           </div>
 
           {/* Main content */}
-          <div className="space-y-4 p-4 sm:p-5">
-            {/* Glowing progress rings */}
-            <div className="grid grid-cols-3 gap-2 sm:gap-3">
-              {rings.map((ring) => (
-                <div
-                  key={ring.label}
-                  className="flex flex-col items-center gap-2 rounded-xl border border-zinc-800 bg-zinc-900 py-3"
-                >
-                  <svg viewBox="0 0 36 36" className="h-9 w-9 -rotate-90 sm:h-10 sm:w-10">
-                    <circle cx="18" cy="18" r="15" fill="none" stroke="#27272a" strokeWidth="4" />
-                    <circle
-                      cx="18"
-                      cy="18"
-                      r="15"
-                      fill="none"
-                      stroke="#f59e0b"
-                      strokeWidth="4"
-                      strokeLinecap="round"
-                      strokeDasharray={`${(ring.pct / 100) * circumference} 999`}
-                      style={{ filter: "drop-shadow(0 0 4px rgba(245,158,11,0.8))" }}
-                    />
-                  </svg>
-                  <span className="text-[9px] font-semibold uppercase tracking-wide text-zinc-500">{ring.label}</span>
+          <div className="space-y-3 p-4 sm:p-5">
+            {/* KPI row */}
+            <div className="grid grid-cols-3 gap-2">
+              {kpis.map((kpi) => (
+                <div key={kpi.label} className="rounded-xl border border-zinc-800 bg-zinc-900 px-2.5 py-2.5 text-center">
+                  <p className="text-[8px] font-semibold uppercase tracking-wide text-zinc-500">{kpi.label}</p>
+                  <p className="mt-0.5 text-sm font-bold tabular-nums text-white">{kpi.value}</p>
                 </div>
               ))}
             </div>
 
-            {/* Blurred skeleton text bars */}
-            <div className="space-y-2">
-              {[
-                { w: "w-full", o: "opacity-90" },
-                { w: "w-5/6", o: "opacity-70" },
-                { w: "w-3/4", o: "opacity-50" },
-              ].map((bar, i) => (
-                <div key={i} className={`h-2.5 rounded-full bg-zinc-800 ${bar.w} ${bar.o}`} />
-              ))}
+            {/* Pacing ring + production trend */}
+            <div className="grid grid-cols-[auto_1fr] items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900 p-3">
+              <div className="relative flex flex-col items-center">
+                <svg viewBox="0 0 36 36" className="h-12 w-12 -rotate-90">
+                  <circle cx="18" cy="18" r="15" fill="none" stroke="#27272a" strokeWidth="4" />
+                  <circle
+                    cx="18"
+                    cy="18"
+                    r="15"
+                    fill="none"
+                    stroke="#f59e0b"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                    strokeDasharray={`${(Math.min(pacingPct, 100) / 100) * circumference} 999`}
+                    style={{ filter: "drop-shadow(0 0 6px rgba(245,158,11,0.9))" }}
+                  />
+                </svg>
+                <span className="absolute top-[15px] text-[9px] font-bold tabular-nums text-amber-400">
+                  {pacingPct}%
+                </span>
+                <span className="mt-1 text-[8px] font-semibold uppercase tracking-wide text-zinc-500">Pacing</span>
+              </div>
+              <svg viewBox="0 0 100 32" className="h-8 w-full" preserveAspectRatio="none">
+                <polyline
+                  points="0,28 15,24 30,26 45,16 60,18 75,8 100,10"
+                  fill="none"
+                  stroke="#f59e0b"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  style={{ filter: "drop-shadow(0 0 4px rgba(245,158,11,0.7))" }}
+                />
+              </svg>
+            </div>
+
+            {/* Generic producer leaderboard */}
+            <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-3">
+              <p className="mb-2 text-[9px] font-semibold uppercase tracking-wider text-zinc-500">Producer Pace</p>
+              <div className="space-y-1.5">
+                {producers.map((p) => (
+                  <div key={p.name} className="flex items-center gap-2">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-zinc-800 text-[8px] font-bold text-zinc-400">
+                      {p.name.slice(-1)}
+                    </span>
+                    <span className="w-16 shrink-0 truncate text-[10px] font-medium text-zinc-300">{p.name}</span>
+                    <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-zinc-800">
+                      <div
+                        className="h-full rounded-full bg-amber-500"
+                        style={{
+                          width: `${Math.min(p.pace, 100)}%`,
+                          boxShadow: p.pace >= 100 ? "0 0 8px rgba(245,158,11,0.7)" : undefined,
+                        }}
+                      />
+                    </div>
+                    <span className="w-8 shrink-0 text-right text-[10px] font-bold tabular-nums text-amber-400">
+                      {p.pace}%
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -214,125 +267,190 @@ function TeamVisibilityVisual() {
   );
 }
 
-/** Coaching: abstract mentorship / collaboration graphic */
-function CoachingConceptGraphic({ wide = false }: { wide?: boolean }) {
+/** "Your Team Isn't a Call Center": high-fidelity variable commission math breakdown, desensitized */
+function CommissionComplexityVisual() {
+  const lines = [
+    { label: "Auto", mtd: 62, ytd: 84 },
+    { label: "Fire", mtd: 48, ytd: 71 },
+    { label: "Commercial", mtd: 55, ytd: 68 },
+    { label: "Life", mtd: 40, ytd: 59 },
+    { label: "Health", mtd: 33, ytd: 52 },
+  ];
+
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br from-slate-50 via-white to-purple-50 ${
-        wide ? "aspect-[21/9] min-h-[280px] md:min-h-[340px]" : "aspect-[4/3]"
-      }`}
+      className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950 p-5 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.6)]"
       aria-hidden
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(147,51,234,0.08),transparent_45%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_70%,rgba(20,184,166,0.08),transparent_40%)]" />
+      <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-amber-500/10 blur-3xl" />
 
-      <svg viewBox="0 0 480 360" className="absolute inset-0 h-full w-full" fill="none">
-        {/* Growth arrows */}
-        <path d="M60 280 L140 200 L200 230 L280 140" stroke="#a855f7" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
-        <path d="M260 155 L280 140 L295 160" stroke="#a855f7" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
-        <path d="M320 260 L380 180 L420 200" stroke="#14b8a6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.45" />
-        <path d="M365 190 L380 180 L390 195" stroke="#14b8a6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.45" />
+      <div className="relative flex items-center justify-between">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Variable Commission Breakdown</p>
+        <span className="rounded-full bg-zinc-800 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-zinc-500">
+          Demo Data
+        </span>
+      </div>
 
-        {/* Connection arcs */}
-        <path d="M160 160 Q240 100 320 160" stroke="#c4b5fd" strokeWidth="2" strokeDasharray="6 6" opacity="0.7" />
-
-        {/* People nodes */}
-        <circle cx="160" cy="170" r="28" fill="#f5f3ff" stroke="#a855f7" strokeWidth="2" />
-        <circle cx="160" cy="162" r="9" fill="#a855f7" />
-        <path d="M142 190 Q160 178 178 190" stroke="#a855f7" strokeWidth="3" strokeLinecap="round" fill="none" />
-
-        <circle cx="320" cy="170" r="28" fill="#f0fdfa" stroke="#14b8a6" strokeWidth="2" />
-        <circle cx="320" cy="162" r="9" fill="#14b8a6" />
-        <path d="M302 190 Q320 178 338 190" stroke="#14b8a6" strokeWidth="3" strokeLinecap="round" fill="none" />
-
-        <circle cx="240" cy="240" r="24" fill="#eff6ff" stroke="#3b82f6" strokeWidth="2" />
-        <circle cx="240" cy="233" r="8" fill="#3b82f6" />
-        <path d="M224 258 Q240 248 256 258" stroke="#3b82f6" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-
-        {/* Handshake symbol between mentors */}
-        <rect x="214" y="148" width="52" height="22" rx="11" fill="#fff" stroke="#e5e7eb" strokeWidth="1.5" />
-        <path d="M224 159 H256" stroke="#7c3aed" strokeWidth="3" strokeLinecap="round" />
-        <path d="M230 154 L236 160 L230 164" stroke="#14b8a6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M250 154 L244 160 L250 164" stroke="#14b8a6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-
-      <div className="absolute bottom-4 left-4 right-4 flex flex-wrap gap-2">
-        {["Mentorship", "Collaboration", "Growth"].map((tag) => (
-          <span
-            key={tag}
-            className="rounded-full border border-gray-200 bg-white/90 px-3 py-1 text-[11px] font-semibold text-gray-600 shadow-sm"
+      <div className="relative mt-3 space-y-1.5">
+        <div className="grid grid-cols-[1fr_auto_auto] gap-2 px-1 text-[8px] font-semibold uppercase tracking-wide text-zinc-600">
+          <span>Line</span>
+          <span className="w-12 text-right">MTD</span>
+          <span className="w-12 text-right">YTD</span>
+        </div>
+        {lines.map((line) => (
+          <div
+            key={line.label}
+            className="grid grid-cols-[1fr_auto_auto] items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-1.5"
           >
-            {tag}
-          </span>
+            <span className="text-[11px] font-semibold text-zinc-300">{line.label}</span>
+            <div className="h-1.5 w-12 overflow-hidden rounded-full bg-zinc-800">
+              <div className="h-full rounded-full bg-amber-500/60" style={{ width: `${line.mtd}%` }} />
+            </div>
+            <div className="h-1.5 w-12 overflow-hidden rounded-full bg-zinc-800">
+              <div
+                className="h-full rounded-full bg-amber-500"
+                style={{ width: `${line.ytd}%`, boxShadow: "0 0 6px rgba(245,158,11,0.6)" }}
+              />
+            </div>
+          </div>
         ))}
+
+        {/* Complex Res. override highlight */}
+        <div className="flex items-center justify-between rounded-lg border border-amber-500/40 bg-amber-500/5 px-3 py-2 shadow-[0_0_15px_rgba(245,158,11,0.25)]">
+          <div>
+            <p className="text-[11px] font-bold text-amber-300">Complex Res. Override</p>
+            <p className="text-[9px] text-zinc-500">Multi-line tier adjustment</p>
+          </div>
+          <span className="text-xs font-bold tabular-nums text-amber-400">×1.18</span>
+        </div>
+      </div>
+
+      {/* Formula strip */}
+      <div className="relative mt-3 truncate rounded-lg border border-zinc-800 bg-black px-3 py-2 font-mono text-[9px] text-zinc-500">
+        <span className="text-zinc-400">Base Comp</span>
+        <span className="mx-1 text-amber-500">×</span>
+        <span className="text-zinc-400">Tier Multiplier</span>
+        <span className="mx-1 text-amber-500">+</span>
+        <span className="text-amber-400">CR Override</span>
+        <span className="mx-1 text-zinc-600">=</span>
+        <span className="text-white">Final Payout</span>
       </div>
     </div>
   );
 }
 
-/** Origin section: agency floor silhouette concept */
-function FounderConceptGraphic() {
+/** "Real Coaching": high-fidelity Cockpit trendline, Current Pacing vs. 30-Day Goal, desensitized */
+function CoachingTrendlineVisual() {
+  const currentPoints = "0,120 40,110 80,116 120,95 160,100 200,80 240,86 280,60 320,66 360,45 400,50 440,30 480,36";
+  const goalPoints = "0,100 40,96 80,92 120,88 160,84 200,80 240,76 280,72 320,68 360,64 400,60 440,56 480,52";
+
   return (
     <div
-      className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-b from-slate-50 to-gray-100"
+      className="relative aspect-[21/9] min-h-[280px] overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950 p-6 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)] md:min-h-[340px]"
       aria-hidden
     >
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_30%,rgba(147,51,234,0.1),transparent_55%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.08),transparent_60%)]" />
+
+      <div className="relative flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Cockpit — Pacing Trend</p>
+          <p className="mt-0.5 text-sm font-semibold text-white">Current Pacing vs. 30-Day Goal</p>
+        </div>
+        <span className="rounded-full bg-zinc-800 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-zinc-500">
+          Demo Data
+        </span>
+      </div>
+
+      <div className="relative mt-6 flex flex-wrap items-center gap-6 text-[10px] font-semibold uppercase tracking-wide">
+        <span className="flex items-center gap-1.5 text-amber-400">
+          <span className="h-2 w-2 animate-pulse rounded-full bg-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.9)]" />
+          Current Pacing
+        </span>
+        <span className="flex items-center gap-1.5 text-zinc-400">
+          <span className="h-0.5 w-4 rounded-full border-t border-dashed border-zinc-500" />
+          30-Day Goal
+        </span>
+      </div>
+
+      <svg viewBox="0 0 480 140" className="relative mt-4 h-32 w-full sm:h-40" preserveAspectRatio="none">
+        <polyline points={goalPoints} fill="none" stroke="#71717a" strokeWidth="2" strokeDasharray="6 5" />
+        <polyline
+          points={goalPoints}
+          fill="none"
+          stroke="#f59e0b"
+          strokeWidth="1"
+          strokeDasharray="6 5"
+          opacity="0.5"
+          style={{ filter: "drop-shadow(0 0 6px rgba(245,158,11,0.5))" }}
+        />
+        <polyline
+          points={currentPoints}
+          fill="none"
+          stroke="#f59e0b"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          style={{ filter: "drop-shadow(0 0 6px rgba(245,158,11,0.85))" }}
+        />
+        <circle cx="480" cy="36" r="4" fill="#f59e0b" style={{ filter: "drop-shadow(0 0 8px rgba(245,158,11,1))" }} />
+      </svg>
+    </div>
+  );
+}
+
+/** Origin section: abstract blueprint geometry overlapping a stylized insurance application form */
+function OriginBlueprintVisual() {
+  return (
+    <div
+      className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950"
+      aria-hidden
+    >
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_30%,rgba(245,158,11,0.12),transparent_60%)]" />
 
       <svg viewBox="0 0 320 400" className="absolute inset-0 h-full w-full" fill="none">
-        {/* Soft backdrop circle */}
-        <circle cx="160" cy="175" r="110" fill="#f8fafc" stroke="#e5e7eb" strokeWidth="1" />
+        {/* Blueprint grid */}
+        {Array.from({ length: 8 }).map((_, i) => (
+          <line key={`h${i}`} x1="0" y1={i * 50} x2="320" y2={i * 50} stroke="#f59e0b" strokeWidth="0.5" opacity="0.12" />
+        ))}
+        {Array.from({ length: 7 }).map((_, i) => (
+          <line key={`v${i}`} x1={i * 50} y1="0" x2={i * 50} y2="400" stroke="#f59e0b" strokeWidth="0.5" opacity="0.12" />
+        ))}
 
-        {/* Shoulders / blazer */}
-        <path
-          d="M70 360 Q90 250 160 245 Q230 250 250 360 Z"
-          fill="#1e293b"
-        />
-        <path
-          d="M118 270 Q160 290 202 270 L210 360 L110 360 Z"
-          fill="#334155"
-        />
-        {/* Collar / tie accent */}
-        <path d="M145 255 L160 290 L175 255" fill="#7c3aed" />
+        {/* Construction geometry */}
+        <circle cx="160" cy="180" r="120" fill="none" stroke="#f59e0b" strokeWidth="0.75" strokeDasharray="4 6" opacity="0.35" />
+        <circle cx="160" cy="180" r="80" fill="none" stroke="#f59e0b" strokeWidth="0.75" strokeDasharray="2 5" opacity="0.3" />
+        <line x1="40" y1="180" x2="280" y2="180" stroke="#f59e0b" strokeWidth="0.5" strokeDasharray="3 4" opacity="0.25" />
+        <line x1="160" y1="60" x2="160" y2="300" stroke="#f59e0b" strokeWidth="0.5" strokeDasharray="3 4" opacity="0.25" />
+        <path d="M60 90 L100 90 L100 60" stroke="#f59e0b" strokeWidth="0.75" opacity="0.3" fill="none" />
+        <path d="M260 270 L220 270 L220 300" stroke="#f59e0b" strokeWidth="0.75" opacity="0.3" fill="none" />
+        <circle cx="60" cy="90" r="2.5" fill="#f59e0b" opacity="0.5" />
+        <circle cx="260" cy="270" r="2.5" fill="#f59e0b" opacity="0.5" />
 
-        {/* Neck */}
-        <rect x="145" y="195" width="30" height="55" rx="10" fill="#cbd5e1" />
-
-        {/* Head */}
-        <ellipse cx="160" cy="155" rx="48" ry="55" fill="#cbd5e1" />
-
-        {/* Hair */}
-        <path
-          d="M112 145 Q112 95 160 88 Q208 95 208 145 Q200 110 160 108 Q120 110 112 145 Z"
-          fill="#334155"
-        />
-
-        {/* Beard detail */}
-        <path
-          d="M120 170 Q125 220 160 235 Q195 220 200 170 Q190 195 160 200 Q130 195 120 170 Z"
-          fill="#475569"
-        />
-        <path
-          d="M128 168 Q135 198 160 205 Q185 198 192 168"
-          stroke="#64748b"
-          strokeWidth="2"
-          fill="none"
-          opacity="0.5"
-        />
-
-        {/* Mustache */}
-        <path
-          d="M138 175 Q160 185 182 175"
-          stroke="#475569"
-          strokeWidth="6"
-          strokeLinecap="round"
-          fill="none"
-        />
+        {/* Stylized insurance application form, overlapping the blueprint */}
+        <g style={{ filter: "drop-shadow(0 0 10px rgba(245,158,11,0.25))" }}>
+          <rect x="105" y="110" width="110" height="150" rx="8" fill="#18181b" stroke="#f59e0b" strokeWidth="1.5" />
+          <rect x="119" y="126" width="60" height="8" rx="4" fill="#f59e0b" opacity="0.8" />
+          <rect x="119" y="150" width="82" height="5" rx="2.5" fill="#3f3f46" />
+          <rect x="119" y="164" width="70" height="5" rx="2.5" fill="#3f3f46" />
+          <rect x="119" y="178" width="82" height="5" rx="2.5" fill="#3f3f46" />
+          <rect x="119" y="192" width="55" height="5" rx="2.5" fill="#3f3f46" />
+          <rect x="119" y="210" width="12" height="12" rx="3" fill="none" stroke="#f59e0b" strokeWidth="1.5" />
+          <path d="M121.5 216 L125 219.5 L130.5 212" stroke="#f59e0b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          <rect x="138" y="213" width="63" height="5" rx="2.5" fill="#3f3f46" />
+          <line x1="119" y1="240" x2="201" y2="240" stroke="#52525b" strokeWidth="1" strokeDasharray="2 3" />
+          <path
+            d="M122 236 Q130 228 136 236 Q142 244 148 236 Q154 228 160 236"
+            stroke="#f59e0b"
+            strokeWidth="1.5"
+            fill="none"
+            strokeLinecap="round"
+          />
+        </g>
       </svg>
 
-      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-white via-white/90 to-transparent px-5 pb-5 pt-16 text-center">
-        <p className="text-xs font-bold uppercase tracking-[0.16em] text-purple-600">Real Agency Floor</p>
-        <p className="mt-1 text-sm font-semibold text-gray-900">Where Centravity began</p>
+      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/90 to-transparent px-5 pb-5 pt-16 text-center">
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-amber-400">Engineered from the Trenches</p>
+        <p className="mt-1 text-sm font-semibold text-white">Blueprint meets bind sheet</p>
       </div>
     </div>
   );
@@ -578,7 +696,7 @@ export default function LandingPage() {
                   ))}
                 </ul>
               </div>
-              <CoachingConceptGraphic />
+              <CommissionComplexityVisual />
             </div>
           </div>
         </section>
@@ -597,7 +715,7 @@ export default function LandingPage() {
               </p>
             </div>
             <div className="mt-12">
-              <CoachingConceptGraphic wide />
+              <CoachingTrendlineVisual />
             </div>
           </div>
         </section>
@@ -640,7 +758,7 @@ export default function LandingPage() {
           <div className="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-24">
             <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
               <div className="mx-auto w-full max-w-sm lg:mx-0">
-                <FounderConceptGraphic />
+                <OriginBlueprintVisual />
               </div>
               <div>
                 <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-purple-600">
