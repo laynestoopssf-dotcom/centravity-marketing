@@ -12,8 +12,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Centravity",
-  description: "Centravity — Private Beta Access.",
+  title: "Centravity — The Compliant Growth Engine for Insurance Agencies",
+  description:
+    "Centravity pairs strict OBA compliance with real-time activity pacing, 30-day rolling conversion metrics, and a God-Mode agent dashboard built for modern insurance agencies.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
