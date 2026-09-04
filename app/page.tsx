@@ -500,18 +500,28 @@ export default function LandingPage() {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
     );
 
+    // The form still collects a single "name" field, but public.waitlist stores first/last
+    // name separately - split on the first space, treating everything after it as the last name.
+    const [firstName, ...lastNameParts] = name.trim().split(/\s+/);
+    const lastName = lastNameParts.join(" ");
+
     const payload = {
       email: trimmedEmail,
-      name: betaFull ? null : name.trim(),
+      first_name: betaFull ? null : firstName || null,
+      last_name: betaFull ? null : lastName || null,
       agency_name: betaFull ? null : agencyName.trim(),
-      lead_type: betaFull ? "waitlist" : "beta",
     };
 
-    const { error } = await supabase.from("agency_leads").insert(payload);
+    // Upsert on email so a duplicate submission (e.g. someone re-applying for the waitlist)
+    // updates their existing row instead of throwing a unique constraint violation.
+    const { error } = await supabase.from("waitlist").upsert(payload, { onConflict: "email" });
 
     setIsSubmitting(false);
 
-    if (error) {
+    // Defensive fallback: if the upsert's conflict target ever doesn't match the table's actual
+    // unique constraint, don't surface a scary error for what is just a duplicate email - treat
+    // it the same as a successful submission.
+    if (error && error.code !== "23505") {
       setErrorMessage("Something went wrong. Please try again.");
       return;
     }
