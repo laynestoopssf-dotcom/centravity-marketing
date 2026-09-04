@@ -464,6 +464,9 @@ export default function LandingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formStatus, setFormStatus] = useState<"idle" | "success">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState(
+    "Application received. We'll be in touch."
+  );
 
   useEffect(() => {
     const checkBetaCapacity = async () => {
@@ -512,20 +515,32 @@ export default function LandingPage() {
       agency_name: betaFull ? null : agencyName.trim(),
     };
 
-    // Upsert on email so a duplicate submission (e.g. someone re-applying for the waitlist)
-    // updates their existing row instead of throwing a unique constraint violation.
-    const { error } = await supabase.from("waitlist").upsert(payload, { onConflict: "email" });
+    // Plain insert - .upsert() requires SELECT privileges to evaluate the ON CONFLICT target,
+    // which the anon role intentionally does not (and should not) have. That silently failed
+    // every insert, including brand new emails, not just duplicates.
+    const { error } = await supabase.from("waitlist").insert(payload);
 
     setIsSubmitting(false);
 
-    // Defensive fallback: if the upsert's conflict target ever doesn't match the table's actual
-    // unique constraint, don't surface a scary error for what is just a duplicate email - treat
-    // it the same as a successful submission.
-    if (error && error.code !== "23505") {
+    if (error) {
+      console.error("Supabase Insert Error:", error);
+
+      // Unique violation - this email is already on the waitlist. Treat it as a success from
+      // the user's perspective instead of surfacing a red error for what isn't really a failure.
+      if (error.code === "23505") {
+        setSuccessMessage("You're already on the waitlist!");
+        setFormStatus("success");
+        setName("");
+        setAgencyName("");
+        setEmail("");
+        return;
+      }
+
       setErrorMessage("Something went wrong. Please try again.");
       return;
     }
 
+    setSuccessMessage("Application received. We'll be in touch.");
     setFormStatus("success");
     setName("");
     setAgencyName("");
@@ -828,7 +843,7 @@ export default function LandingPage() {
 
                     {formStatus === "success" ? (
                       <p className="mt-8 text-sm font-semibold text-emerald-600">
-                        Application received. We&apos;ll be in touch.
+                        {successMessage}
                       </p>
                     ) : (
                       <form onSubmit={handleLeadSubmit} className="mt-8 space-y-3 text-left">
@@ -907,7 +922,7 @@ export default function LandingPage() {
 
                     {formStatus === "success" ? (
                       <p className="mt-8 text-sm font-semibold text-emerald-600">
-                        Application received. We&apos;ll be in touch.
+                        {successMessage}
                       </p>
                     ) : (
                       <form onSubmit={handleLeadSubmit} className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
