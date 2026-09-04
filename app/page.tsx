@@ -508,10 +508,14 @@ export default function LandingPage() {
     const [firstName, ...lastNameParts] = name.trim().split(/\s+/);
     const lastName = lastNameParts.join(" ");
 
+    // last_name is NOT NULL in public.waitlist. A single-word name (e.g. "Layne") produces an
+    // empty string from the join above, and `lastName || null` was coercing that "" to null,
+    // triggering a 23502 not-null violation. Default to "" instead so it's always a valid string,
+    // whether that's because only one name was given or (in the waitlist-full flow) no name at all.
     const payload = {
       email: trimmedEmail,
       first_name: betaFull ? null : firstName || null,
-      last_name: betaFull ? null : lastName || null,
+      last_name: betaFull ? "" : lastName || "",
       agency_name: betaFull ? null : agencyName.trim(),
     };
 
